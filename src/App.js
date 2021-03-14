@@ -15,6 +15,47 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
 
+  const carSpect = [
+    {
+      model: 'Porsche',
+      regNr: '456123'
+    },
+    {
+      model: 'bmw',
+      regNr: '123abc'
+    },
+    {
+      model: 'AUDI',
+      regNr: '123LTY'
+    }
+  ]
+  
+  function toNewPort(){
+    
+    let newPort = carSpect.shift()
+    
+    console.log(`${newPort.model} ${newPort.regNr} come to port 1`)
+    
+  }
+ 
+  toNewPort()
+  
+
+  let newSpect = []
+
+  function putToArr (model, regNr, carSpect = carSpect){
+    carSpect.push({model: model, regNr: regNr})
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    let model = e.target[0].value
+    let regNr = e.target[1].value 
+   newSpect = {model: model, regNr: regNr}
+ console.log(newSpect)
+
+} 
+
   
   const classes = useStyles()
   return (
@@ -23,11 +64,11 @@ function App() {
       <Container maxWidth="md">
         <h1>CarSpect</h1>
         <Grid container spacing={3}>
-          <form className={classes.root} noValidate autoComplete="off">
+          <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
             <Grid xs={12} sm={12} md={6} item>
             <TextField id="standard-basic" label="AUDI, BMW ..." />
             <TextField id="standard-basic" label="ABC123 ..." />
-              <Button variant="contained" color="primary" fullWidth>
+              <Button type='submit' variant="contained" color="primary" fullWidth>
                 Add
               </Button>
             </Grid>
