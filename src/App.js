@@ -1,21 +1,15 @@
 import { Button, Container, CssBaseline, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+import React, { useState} from 'react'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-  body:{
-    margin: '0 auto',
-  }
-}));
 
-const carSpect = [{model:'BMW',regNr:'ABC123'}]
 const carSpect2 = [{model:'Toyota',regNr:'ATY323'}]
 
 
+
+function App() {
+const [carSpect, setCarSpect] = useState([{model:'BMW',regNr:'ABC123'},{model:'BMW',regNr:'ABC123'}])
+// TODO 1.0 add a useState for messages that will take a string
+const [ carMsg, setCarMsg] = useState('')
 
 // TODO 1.0 
   // Create a function that takes two parameters: "model, regNr"
@@ -23,7 +17,7 @@ const carSpect2 = [{model:'Toyota',regNr:'ATY323'}]
   
   // ANCHOR - This is the Add Function
   function addCar (model, regNr){
-    carSpect.push({model, regNr})
+    setCarSpect([...carSpect, {model, regNr}])
   }
   // addCar('honda', 'her345')
   // console.log(carSpect)
@@ -36,12 +30,15 @@ const carSpect2 = [{model:'Toyota',regNr:'ATY323'}]
     function callCar (){
       let callCarMsg 
       if(carSpect.length > 0 ){
-      let removedCar = carSpect.shift()
-      callCarMsg= `${removedCar.model} ${removedCar.regNr} Come to port one!`
+        let removedCar = carSpect.shift()
+        // Initialize the state with the message.¨
+        
+        callCarMsg= `${removedCar.model} ${removedCar.regNr} Come to port one!`
+        setCarSpect([...carSpect])
       } else {
         callCarMsg = 'No cars to call!'
       }
-      console.log(callCarMsg)
+      setCarMsg(callCarMsg)
     }
   
 
@@ -63,40 +60,61 @@ const carSpect2 = [{model:'Toyota',regNr:'ATY323'}]
          prev[inputName] = inputValue
          return prev
         }, {})
-        addCar(formData.model, formData.regNr)
-        console.log(carSpect)
+        
+        if(formData.model !== '' && formData.regNr !== ''){
+          addCar(formData.model, formData.regNr)
+        }else{
+          console.log('You need to put in some Credentials')
+        }
       }
       
       function handleCallBtn() {
         callCar()
       }
 
-function App() {
 
 
-  const classes = useStyles()
-  
+  const useStyles = makeStyles(theme => ({
+    root: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  }));
+
   return (
-    <div>
-      <CssBaseline />
-      <Container maxWidth="md">
+    <Container align='center' width='80%'>
         <h1>CarSpect</h1>
-        <Grid container spacing={3}>
-          <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
+        <Grid container direction="row" justify="center" alignItems="flex-start">
+          <form onSubmit={handleSubmit}  noValidate autoComplete="off">
             <Grid xs={12} sm={12} md={6} item>
-            <TextField id="standard-basic" name='model' label="AUDI, BMW ..." />
-            <TextField id="standard-basic" name='regNr' label="ABC123 ..." />
+              <TextField id="standard-basic" name='model' label="Car brand" />
+            </Grid>
+            <Grid xs={12} sm={12} md={6} item>
+              <TextField id="standard-basic" name='regNr' label="Registration Nr" />
+            </Grid>
+            <Grid xs={12} sm={12} md={6} item>
+
             <Button onClick={handleCallBtn} variant="contained" color="primary" fullWidth>
                 Call Car
             </Button>
+            </Grid>
+            <Grid xs={12} sm={12} md={6} item>
             <Button type='submit' variant="contained" color="primary" fullWidth>
                 Add
             </Button>
             </Grid>
           </form>
-          </Grid>
-      </Container>
-    </div>
+          {/** Pute the state here! */}
+          <h2>{carMsg}</h2>
+          <ul>
+          {carSpect.map((car, i)=> (
+            <li key={car.regNr}>{`${i+1}. ${car.model} ${car.regNr}`}</li>
+          )  )}
+
+          </ul>
+        </Grid>
+    </Container>
   );
 }
 
