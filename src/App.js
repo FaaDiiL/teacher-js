@@ -1,4 +1,6 @@
-import { Button, Container, CssBaseline, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+import React, {useState} from 'react';
+import { Button, Container, CssBaseline, Grid, makeStyles, TextField } from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,21 +16,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 function App() {
-  
-    let carSpect = [{model:'AUDI', regNr:'ASD234'}];
+  const [carSpect, setCarSpect] = useState([{model:'AUDI', regNr:'ASD234'},{model:'AUDI', regNr:'ASD235'},{model:'AUDI', regNr:'ASD236'}]);
+  const [callNext, setCallNext] = useState('')
+ 
 
-  function addCar(model, regNR) {
-    carSpect.push({model, regNR})
+  function addCar(model, regNr) {
+    /* carSpect.push({model, regNR}) */
+
+    setCarSpect([...carSpect,{model, regNr}])
   }
-
-  addCar('Mercedes', 'LOF658')
-  console.log(carSpect)
 
   const handleSubmit = (e) => {
     e.preventDefault()
  let model = e.target[0].value
  let regNr = e.target[1].value
  addCar(model, regNr)
+ console.log(carSpect)
   }
    // TODO 1.0
     // Create a function that remove the first element from an array
@@ -37,11 +40,21 @@ function App() {
     // Log the new array
 
   const handleNext = () => {
+  
+   if (carSpect.length > 0) {
     let obj = carSpect.shift()
-    console.log(`Car ${obj.model} with reg nr ${obj.regNr} is next`)
-    console.log(carSpect)
+    setCallNext(`Car ${obj.model} with reg nr ${obj.regNr} is next`)
+   } 
+   else {
+     setCallNext('No more cars left')
+     
+     setTimeout(() => {
+      setCallNext(null)
+     }, 3000)
+     
+   }
   }
-handleNext()
+
   
   const classes = useStyles()
   return (
@@ -54,11 +67,21 @@ handleNext()
             <Grid xs={12} sm={12} md={6} item>
             <TextField id="standard-basic" label="AUDI, BMW ..." />
             <TextField id="standard-basic" label="ABC123 ..." />
+            <Button onClick={handleNext} variant="contained" color="primary" fullWidth>
+                Call Car
+              </Button>
               <Button type='submit' variant="contained" color="primary" fullWidth>
                 Add
               </Button>
+              
             </Grid>
           </form>
+          <h3>{callNext}</h3>
+          <ul>
+            {carSpect.map((car)=>(
+              <li key={car.regNr}>({car.model} {car.regNr})</li>
+            ))}
+          </ul>
           </Grid>
       </Container>
     </div>
