@@ -85,14 +85,15 @@ function App() {
       setMsg(`You entered the right number on round ${guessCounter.length}!`)
       setGuessCounter([])
     }
-    // else If the random number is larger then the guessed number do this
+    // else If the random number is greater then the guessed number do this
     else if (generatedNumber > guessedNumber) {
       setGuessCounter([...guessCounter, guessedNumber])
       console.log(`%c ${guessedNumber} was to low!`, 'color:red')
 
       setMsg(`${guessedNumber} was to low.`)
     }
-    // else If the random number is larger then the guessed number do this
+
+    // else If the random number is less then the guessed number do this
     else if (generatedNumber < guessedNumber) {
       setGuessCounter([...guessCounter, guessedNumber])
 
