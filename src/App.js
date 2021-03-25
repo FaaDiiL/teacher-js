@@ -1,12 +1,13 @@
 import React,{ useEffect, useState } from 'react'
 
-
 export const MinAndMaxComponent = () => {
   
-  
+  const CreateRandomNumber = () => {
+    
+  }
 
   return (
-    <form>
+    <form onSubmit={CreateRandomNumber}>
       <label>Minimum: <input name='minRangeInpEl' /> </label>
       <label>Maximum: <input name='maxRangeInpEl' /> </label>
       <button>Add</button>
