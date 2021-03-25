@@ -1,80 +1,110 @@
-import { Button, Container, CssBaseline, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
-import React, { useState } from 'react'
+import React, {useState, useEffect} from 'react'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-  body:{
-    margin: '0 auto',
-  }
-}));
+function Form({setGeneratedNumber}){
+    const [minInputVal, setMinInputVal]= useState('')
+    const [maxInputVal, setMaxInputVal]= useState('')
+    let randomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1 ) + min); 
+    
+    function handleSubmit(e) {
+      e.preventDefault()
 
-function App() {
-  const [carSpect, setCarSpect] = useState([{model:'BMW',regNr:'ABC123'},{model:'Toyota',regNr:'ACB145'},{model:'Mazda',regNr:'RTG163'},{model:'VolksWagen',regNr:'IGR834'}])
-  const [callMessage, setCallMessage] = useState('')
-
-  function registerCar(model,regNr,port=carSpect){
-    setCarSpect([...carSpect, {model,regNr}])
+    setGeneratedNumber(randomNumber(minInputVal, maxInputVal))
+    
   }
 
-  function callCar(e) {
-    if(carSpect.length > 0){
-      let calledCar = carSpect.shift()
-      setCarSpect([...carSpect])
-      setCallMessage(`${calledCar.model} ${calledCar.model} come to port 1`)
-    }else {
-      setCallMessage('No cars to call!')
-      
-      setTimeout(()=>{
-        setCallMessage(null)
-      },3000);
+  function handleChange(e) {
+    switch (e.target.name) {
+      case 'minInput':
+        setMinInputVal(e.target.value)
+        break;
+
+        case 'maxInput':
+          setMaxInputVal(e.target.value)
+          break;
+    
+      default:
+        break;
+
+
     }
   }
+  
+  return ( 
+  
+      <form onSubmit={handleSubmit}> 
+      {/* <div style={{textAlign:'center', backgroundColor:'salmon', margin:100,padding:20}}>  */}
+        <input onChange={handleChange} style={{padding:5, margin:10, borderWidth:2}} type='text' name='minInput' placeholder='Add min value' /> 
+        <input onChange={handleChange} style={{padding:5, margin:10, borderWidth:2}} type='text' name='maxInput' placeholder='Add max value' />
+        <button style={{margin:10, color:'black', borderWidth:'thick'}}> ADD </button>
+        {/* </div> */}
+      </form>
+ 
+  )
+}
 
+function GuessForm ({setGuessInputVal}) {
+  
+  
+  
   function handleSubmit(e) {
     e.preventDefault()
-    let model = e.target[0].value
-    let regNr = e.target[1].value
-    registerCar(model,regNr)
-    console.log(carSpect)
+    setGuessInputVal(parseInt(e.target[0].value))
   }
-  const classes = useStyles()
+
+    
+
 
 
   return (
-    <div>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <h1>CarSpect</h1>
-        <Grid container spacing={3}>
-          <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
-            <Grid xs={12} sm={12} md={6} item>
-            <TextField id="standard-basic" label="AUDI, BMW ..." />
-            <TextField id="standard-basic" label="ABC123 ..." />
-            <Button onClick={callCar} variant="contained" color="primary" fullWidth>
-                Call Car
-            </Button>
-            <Button type={'submit'}variant="contained" color="primary" fullWidth>
-                Add
-            </Button>
-            </Grid>
-          </form>
-          <h3>{callMessage}</h3>
-          <ul>
-            {
-              carSpect.map((car)=>(
-                <li key={car.regNr}>{car.model} {car.regNr} </li>
-              ))
-            }
-          </ul>
-          </Grid>
-      </Container>
-    </div>
-  );
+    <form onSubmit={handleSubmit}>
+          {/* <div style={{ margin:50}}>  */}
+            <p style={{color:'white', textAlign:'center'}}>
+              We have selected a random number between 1 - 100. See if you can guess it.
+            </p> 
+            <input style={{padding:5, margin:10, borderWidth:2}} type='text' name='GuessInput' placeholder='Add your Guess' /> 
+            <button style={{margin:10, color:'black', borderWidth:'thick'}} name='GuessBtn'> Guess </button>
+          {/* </div>  */}
+    </form>
+  )
 }
 
-export default App;
+
+
+function App() {
+ 
+  const [guessInputVal, setGuessInputVal]= useState(undefined)
+  const [generatedNumber, setGeneratedNumber]= useState(undefined)
+  const [msg, setMsg]= useState('')
+
+  useEffect(()=> {
+   startGame()
+
+  },[guessInputVal])
+  console.log(generatedNumber)
+  
+ function startGame() {
+        if(generatedNumber !== undefined && generatedNumber == guessInputVal  ){
+          setMsg(`Congratulation !! You guessed it right ${guessInputVal} was the right guess!` )
+        }
+      }
+ 
+// if(guessInputVal == generatedNumber){
+  //     <h2> Congratulation !! You guessed it right ${userGuess} was the right guess! </h2>
+  //   }else if(guessInputVal !== generatedNumber ){
+  //     <h2> OOPS Sorry! Try Again</h2>
+  //   }else {
+      
+  //   }
+
+console.log(guessInputVal)
+
+  return (
+    <div>
+      <Form setGeneratedNumber={setGeneratedNumber}/> 
+      <GuessForm setGuessInputVal={setGuessInputVal} />
+      <h2>{msg}</h2>
+    </div>
+  )
+}
+
+export default App
