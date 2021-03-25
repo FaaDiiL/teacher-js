@@ -109,6 +109,7 @@ function App() {
       <br />
       <GuessNumber setGuessedNumber={setGuessedNumber} guessedNumber={guessedNumber} />
       {
+        // printing out a paragraph with message and guessed numbers.
         msg && <p>{msg} Your guesses: [{guessCounter.join(', ')}]</p>
       }
     </div>
