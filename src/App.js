@@ -63,7 +63,7 @@ const App = () => {
       SetFailmsg("Your guess is too low")
     } else {
       SetCelebrate(true)
-      SetFailmsg("Wallahi billahi tillihi It works")
+      SetFailmsg("TLIILIILILIILILIIIII It works")
     }
   }
 
@@ -80,27 +80,29 @@ const App = () => {
 
 
   return (
-    <StyledWrapper>
+    <>
       {celebrate && <Confetti />}
+      <StyledWrapper>
 
-      <h1>Number Guessination</h1>
+        <h1>Number Guessination</h1>
 
-      <form>
-        <input onChange={handleCollect} name="minimum" id="minnum" type="number" placeholder="Min number" />
-        <input onChange={handleCollect} name="maximum" id="maxnum" type="number" placeholder="Max number" />
-        <button onClick={handleRandomize}>Randomize</button>
-      </form>
-      <div>
-        <label>Your Guess </label><br />
-        <input onChange={handleCollect} name="guess" type="number" />
-        <button onClick={handleGuess} >Guess</button>
-        <div>{failmsg}</div>
+        <form>
+          <input onChange={handleCollect} name="minimum" id="minnum" type="number" placeholder="Min number" />
+          <input onChange={handleCollect} name="maximum" id="maxnum" type="number" placeholder="Max number" />
+          <button onClick={handleRandomize}>Randomize</button>
+        </form>
+        <div>
+          <label>Your Guess </label><br />
+          <input onChange={handleCollect} name="guess" type="number" />
+          <button onClick={handleGuess} >Guess</button>
+          <div>{failmsg}</div>
 
-      </div>
-      <div>Failed guesses: {renderfail && (<span>{renderfail.join(" - ")}</span>)} </div>
-      <div>{rand}</div>
+        </div>
+        <div>Failed guesses: {renderfail && (<span>{renderfail.join(" - ")}</span>)} </div>
+        <div>{rand}</div>
 
-    </StyledWrapper>
+      </StyledWrapper>
+    </>
   );
 }
 
