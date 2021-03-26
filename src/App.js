@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useState, useEffect } from 'react';
+import Confetti from 'react-confetti'
 
 const StyledWrapper = styled.div`
 font-family: Arial, Helvetica, sans-serif;
@@ -19,8 +20,6 @@ button{
 `
 
 
-
-
 const App = () => {
   const [rand, SetRand] = useState("")
   const [min, SetMin] = useState("")
@@ -29,6 +28,7 @@ const App = () => {
   const [fail, SetFail] = useState([])
   const [renderfail, SetRenderfail] = useState([])
   const [failmsg, SetFailmsg] = useState("")
+  const [celebrate, SetCelebrate] = useState(false)
 
 
 
@@ -62,17 +62,26 @@ const App = () => {
       SetFail([...fail, guess])
       SetFailmsg("Your guess is too low")
     } else {
+      SetCelebrate(true)
       SetFailmsg("Wallahi billahi tillihi It works")
     }
   }
 
   useEffect(() => {
-    console.log(renderfail)
     SetRenderfail(fail)
   }, [fail])
 
+
+  useEffect(() => {
+    setTimeout(() => {
+      SetCelebrate(false)
+    }, 6000)
+  }, [celebrate])
+
+
   return (
     <StyledWrapper>
+      {celebrate && <Confetti />}
 
       <h1>Number Guessination</h1>
 
