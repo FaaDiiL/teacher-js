@@ -1,79 +1,97 @@
-import { Button, Container, CssBaseline, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
-import React, { useState } from 'react'
+import styled from 'styled-components'
+import { useState, useEffect } from 'react';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-  body:{
-    margin: '0 auto',
-  }
-}));
+const StyledWrapper = styled.div`
+font-family: Arial, Helvetica, sans-serif;
+& > *{
+  margin: 40px 20px;
+}
+button, input{
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid darkslategrey;
+}
+button{
+  margin: 0 10px;
+  background: aquamarine;
+  border: none;
+}
+`
 
-function App() {
-  const [carSpect, setCarSpect] = useState([{model:'BMW',regNr:'ABC123'},{model:'Toyota',regNr:'ACB145'},{model:'Mazda',regNr:'RTG163'},{model:'VolksWagen',regNr:'IGR834'}])
-  const [callMessage, setCallMessage] = useState('')
 
-  function registerCar(model,regNr,port=carSpect){
-    setCarSpect([...carSpect, {model,regNr}])
-  }
 
-  function callCar(e) {
-    if(carSpect.length > 0){
-      let calledCar = carSpect.shift()
-      setCarSpect([...carSpect])
-      setCallMessage(`${calledCar.model} ${calledCar.model} come to port 1`)
-    }else {
-      setCallMessage('No cars to call!')
-      
-      setTimeout(()=>{
-        setCallMessage(null)
-      },3000);
+
+const App = () => {
+  const [rand, SetRand] = useState("")
+  const [min, SetMin] = useState("")
+  const [max, SetMax] = useState("")
+  const [guess, SetGuess] = useState("")
+  const [fail, SetFail] = useState([])
+  const [renderfail, SetRenderfail] = useState([])
+  const [failmsg, SetFailmsg] = useState("")
+
+
+
+  const handleCollect = (e) => {
+    switch (e.target.name) {
+      case "minimum":
+        SetMin(Math.ceil(e.target.value))
+        break;
+      case "maximum":
+        SetMax(Math.floor(e.target.value))
+        break;
+      case "guess":
+        SetGuess(e.target.value)
+        break;
+
+      default:
+        break;
     }
   }
 
-  function handleSubmit(e) {
+  const handleRandomize = (e) => {
     e.preventDefault()
-    let model = e.target[0].value
-    let regNr = e.target[1].value
-    registerCar(model,regNr)
-    console.log(carSpect)
+    SetRand(Math.floor(Math.random() * (max - min + 1) + min))
   }
-  const classes = useStyles()
 
+  const handleGuess = () => {
+    if (guess > rand) {
+      SetFail([...fail, guess])
+      SetFailmsg("Your guess is too high")
+    } else if (guess < rand) {
+      SetFail([...fail, guess])
+      SetFailmsg("Your guess is too low")
+    } else {
+      SetFailmsg("Wallahi billahi tillihi It works")
+    }
+  }
+
+  useEffect(() => {
+    console.log(renderfail)
+    SetRenderfail(fail)
+  }, [fail])
 
   return (
-    <div>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <h1>CarSpect</h1>
-        <Grid container spacing={3}>
-          <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
-            <Grid xs={12} sm={12} md={6} item>
-            <TextField id="standard-basic" label="AUDI, BMW ..." />
-            <TextField id="standard-basic" label="ABC123 ..." />
-            <Button onClick={callCar} variant="contained" color="primary" fullWidth>
-                Call Car
-            </Button>
-            <Button type={'submit'}variant="contained" color="primary" fullWidth>
-                Add
-            </Button>
-            </Grid>
-          </form>
-          <h3>{callMessage}</h3>
-          <ul>
-            {
-              carSpect.map((car)=>(
-                <li key={car.regNr}>{car.model} {car.regNr} </li>
-              ))
-            }
-          </ul>
-          </Grid>
-      </Container>
-    </div>
+    <StyledWrapper>
+
+      <h1>Number Guessination</h1>
+
+      <form>
+        <input onChange={handleCollect} name="minimum" id="minnum" type="number" placeholder="Min number" />
+        <input onChange={handleCollect} name="maximum" id="maxnum" type="number" placeholder="Max number" />
+        <button onClick={handleRandomize}>Randomize</button>
+      </form>
+      <div>
+        <label>Your Guess </label><br />
+        <input onChange={handleCollect} name="guess" type="number" />
+        <button onClick={handleGuess} >Guess</button>
+        <div>{failmsg}</div>
+
+      </div>
+      <div>Failed guesses: {renderfail && (<span>{renderfail.join(" - ")}</span>)} </div>
+      <div>{rand}</div>
+
+    </StyledWrapper>
   );
 }
 
