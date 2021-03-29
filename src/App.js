@@ -1,61 +1,57 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+
+const StyledBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+const StyledChatOne = styled.div`
+  height: 400px;
+  width: 500px;
+  background-color: lightgrey;
+`;
+
+const StyledChatTwo = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  height: 400px;
+  width: 500px;
+  background-color: lightblue;
+`;
 
 function App() {
-  const [inputNr, setInputNr] = useState(null);
-  const [inputGenerator, setInputGenerator] = useState(null);
+  const ACTIONS = {};
 
-  function randomInteger(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  const [chat, setChat] = useState([]);
 
-  function randomGenerator() {
-    return Math.floor(Math.random() * 10) + 1;
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let nrOne = e.target[0].value;
-    let nrTwo = e.target[1].value;
-
-    setInputNr(randomInteger(nrOne, nrTwo));
-    console.log(inputNr);
-  };
-
-  const handleChange = (e) => {
-    /* e.target.form[0].value; */
-  };
-
-  const handleDigits = (e) => {
-    e.preventDefault();
-    let setNr = e.target[0].value;
-    if (setNr === inputNr) {
-      setInputGenerator(setNr);
-    }
-  };
+  //write something on the board
+  const handleSubmit = () => {};
 
   return (
     <>
-      <div>
-        <h1>Math</h1>
-
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="minimi">minimi:</label>
-          <input type="number" id="minimi" />
-          <label htmlFor="maximi">maximi:</label>
-          <input type="number" id="maximi" />
-          <button type="submit">Add</button>
-        </form>
-        <div>
-          <h1>My randomized nr: {inputNr}</h1>
-        </div>
-        <form onSubmit={handleDigits}>
-          <input onChange={handleChange} type="number" name="guess" />
-          <button type="submit">Guess</button>
-          <h1>You guessed: {inputGenerator}</h1>
-        </form>
-      </div>
+      <StyledBody>
+        <h1>Chatroom</h1>
+        <StyledChatOne>
+          <form>
+            <label htmlFor="text1">write something</label>
+            <input type="text" id="text1" />
+            <button type="submit">send</button>
+          </form>
+          <h1></h1>
+        </StyledChatOne>
+        <StyledChatTwo>
+          <form>
+            <label htmlFor="text2">write something</label>
+            <input type="text" id="text2" />
+            <button type="submit">send</button>
+          </form>
+          <h1></h1>
+        </StyledChatTwo>
+      </StyledBody>
     </>
   );
 }
