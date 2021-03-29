@@ -1,116 +1,62 @@
-import {
-  Button,
-  Container,
-  CssBaseline,
-  Grid,
-  makeStyles,
-  TextField,
-  Typography,
-} from "@material-ui/core";
-
-import { useState } from "react";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
-  },
-  body: {
-    margin: "0 auto",
-  },
-}));
+import React, { useState } from "react";
 
 function App() {
-  const [string, setString] = useState("");
-  const [cars, setCars] = useState([
-    {
-      model: "Porsche",
-      regNr: "456123",
-    },
-    {
-      model: "bmw",
-      regNr: "123abc",
-    },
-    {
-      model: "AUDI",
-      regNr: "123LTY",
-    },
-  ]);
+  const [inputNr, setInputNr] = useState(null);
+  const [inputGenerator, setInputGenerator] = useState(null);
 
-  function toNewPort() {
-    let newPort = cars.shift();
-    /* setString(`${} go to to Port 77`); */
-    setString(`${newPort.model} ${newPort.regNr} Go to port 1`);
-    if (cars.length === 0) {
-      setString("Go home bitch your done 4 2dääY!");
-
-      setTimeout(() => {
-        setString("");
-      }, 3200);
-    }
+  function randomInteger(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function putToArr(model, regNr) {
-    /* carspect.push({ model: model, regNr: regNr }); */
-    setCars([...cars, { model: model, regNr: regNr }]);
+  function randomGenerator() {
+    return Math.floor(Math.random() * 10) + 1;
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let model = e.target[0].value;
-    let regNr = e.target[1].value;
-    putToArr(model, regNr);
+    let nrOne = e.target[0].value;
+    let nrTwo = e.target[1].value;
 
-    console.log(...cars);
+    setInputNr(randomInteger(nrOne, nrTwo));
+    console.log(inputNr);
   };
 
-  const classes = useStyles();
+  const handleChange = (e) => {
+    /* e.target.form[0].value; */
+  };
+
+  const handleDigits = (e) => {
+    e.preventDefault();
+    let setNr = e.target[0].value;
+    if (setNr === inputNr) {
+      setInputGenerator(setNr);
+    }
+  };
+
   return (
-    <div>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <h1>CarSpect</h1>
-        <Grid container spacing={3}>
-          <form
-            onSubmit={handleSubmit}
-            className={classes.root}
-            noValidate
-            autoComplete="off"
-          >
-            <Grid xs={12} sm={12} md={6} item>
-              <TextField id="standard-basic" label="AUDI, BMW ..." />
-              <TextField id="standard-basic" label="ABC123 ..." />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Add
-              </Button>
-              <Button
-                onClick={toNewPort}
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                call next car
-              </Button>
-            </Grid>
-          </form>
-          <h3>{string}</h3>
-          <ul>
-            {cars.map((car, i) => (
-              <li key={i}>
-                {car.model} {car.regNr}
-              </li>
-            ))}
-          </ul>
-        </Grid>
-      </Container>
-    </div>
+    <>
+      <div>
+        <h1>Math</h1>
+
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="minimi">minimi:</label>
+          <input type="number" id="minimi" />
+          <label htmlFor="maximi">maximi:</label>
+          <input type="number" id="maximi" />
+          <button type="submit">Add</button>
+        </form>
+        <div>
+          <h1>My randomized nr: {inputNr}</h1>
+        </div>
+        <form onSubmit={handleDigits}>
+          <input onChange={handleChange} type="number" name="guess" />
+          <button type="submit">Guess</button>
+          <h1>You guessed: {inputGenerator}</h1>
+        </form>
+      </div>
+    </>
   );
 }
 
