@@ -1,29 +1,32 @@
 import React, { useState } from 'react'
 import CreateRandomNumber from './CreateRandomNumber'
-
+import {useHistory} from 'react-router-dom'
+    
 export const MinAndMaxComponent = ({ setGeneratedNumber }) => {
      const [minRangeInpVal, setMinRangeInpVal] = useState('')
      const [maxRangeInpVal, setMaxRangeInpVal] = useState('')
-   
+     const history = useHistory();
+     
      // const CreateRandomNumber = (min, max) => {
      //   min = Math.ceil(min)
      //   max = Math.floor(max)
      //   return Math.floor(Math.random() * (max - min + 1) + min)
      // }
    
-     // console.log(` RandomNum: %c${CreateRandomNumber(1,10)}`, "color:green")
+     // console.log(`RandomNum: %c${CreateRandomNumber(1,10)}`, "color:green")
      const handleSubmit = (e) => {
        e.preventDefault()
        setGeneratedNumber(CreateRandomNumber(minRangeInpVal, maxRangeInpVal))
+       history.push('/guess-number')
      }
    
      const handleChange = (e) => {
        switch (e.target.name) {
          case 'minRangeInpEl':
-           setMinRangeInpVal(e.target.value)
+           setMinRangeInpVal(parseInt(e.target.value))
            break
          case 'maxRangeInpEl':
-           setMaxRangeInpVal(e.target.value)
+           setMaxRangeInpVal(parseInt(e.target.value))
            break
    
          default:

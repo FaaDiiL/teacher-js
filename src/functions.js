@@ -1,11 +1,15 @@
-export function checkGuess({generatedNumber,guessedNumber, guessCounter, setMsg, setGuessCounter}) {
-     // If the random number match the guessed number do this
-     if (generatedNumber === guessedNumber) {
+
+export function checkGuess({generatedNumber,guessedNumber, guessCounter, setMsg, setGuessCounter , useHistory}) {
+  // If the random number match the guessed number do this
+     if (generatedNumber === guessedNumber && generatedNumber) {
        console.log(
          ` Right guess! %c You entered the right number on the ${guessCounter.length} guess!`,
          'color:green'
        )
-       setMsg(`You entered the right number on round ${guessCounter.length}!`)
+       setMsg(`${generatedNumber} is the right number! You did it on round ${guessCounter.length}!`)
+       setTimeout(() => {
+         window.location = `/`;
+       }, 10000);
      }
      // else If the random number is greater then the guessed number do this
      else if (generatedNumber > guessedNumber) {
