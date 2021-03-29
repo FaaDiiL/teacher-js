@@ -5,7 +5,7 @@ const GuessNumber = ({ setGuessedNumber }) => {
    
      const handleSubmit = (e) => {
        e.preventDefault()
-       setGuessedNumber(userGuess)
+       setGuessedNumber(parseInt(userGuess))
        e.target[0].value = ''
      }
      const handleChange = (e) => {
